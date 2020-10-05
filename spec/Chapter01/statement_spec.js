@@ -1,4 +1,4 @@
-const statement = require('../../src/Chapter01/statement');
+const statement = require('../../src/chapter01/statement');
 
 describe('Statement', function () {
     const playsJson = {
@@ -8,19 +8,24 @@ describe('Statement', function () {
     };
     const invoicesJson = [
         {
+            "customer": "NoShowCo",
+            "performances": [
+                {
+                    "playID": "hamlet",
+                    "audience": 0
+                }
+            ]
+        },
+        {
             "customer": "SmallCo",
             "performances": [
                 {
                     "playID": "hamlet",
-                    "audience": 10
+                    "audience": 0
                 },
                 {
                     "playID": "as-like",
-                    "audience": 10
-                },
-                {
-                    "playID": "othello",
-                    "audience": 10
+                    "audience": 0
                 }
             ]
         },
@@ -42,18 +47,25 @@ describe('Statement', function () {
             ]
         }
     ]
-    it('multiple plays and no bonus payments due to attendance', function () {
+    it('one tragedy play with no attendees', function () {
         expect(statement(invoicesJson[0], playsJson)).toEqual(
+            'Statement for NoShowCo\n' +
+            ' Hamlet: $400.00 (0 seats)\n' +
+            'Amount owed is $400.00\n' +
+            'You earned 0 credits\n'
+        )
+    })
+    it('one tragedy, one comedy and no bonus payments', function () {
+        expect(statement(invoicesJson[1], playsJson)).toEqual(
             'Statement for SmallCo\n' +
-            ' Hamlet: $400.00 (10 seats)\n' +
-            ' As You Like It: $330.00 (10 seats)\n' +
-            ' Othello: $400.00 (10 seats)\n' +
-            'Amount owed is $1,130.00\n' +
-            'You earned 2 credits\n'
+            ' Hamlet: $400.00 (0 seats)\n' +
+            ' As You Like It: $300.00 (0 seats)\n' +
+            'Amount owed is $700.00\n' +
+            'You earned 0 credits\n'
         )
     })
     it("multiple plays and all require bonus payments due to attendance", function () {
-        expect(statement(invoicesJson[1], playsJson)).toEqual(
+        expect(statement(invoicesJson[2], playsJson)).toEqual(
             'Statement for BigCo\n' +
             ' Hamlet: $650.00 (55 seats)\n' +
             ' As You Like It: $580.00 (35 seats)\n' +
