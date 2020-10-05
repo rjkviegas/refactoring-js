@@ -17,6 +17,15 @@ describe('Statement', function () {
             ]
         },
         {
+            "customer": "NoShowCo",
+            "performances": [
+                {
+                    "playID": "as-like",
+                    "audience": 0
+                }
+            ]
+        },
+        {
             "customer": "SmallCo",
             "performances": [
                 {
@@ -55,8 +64,16 @@ describe('Statement', function () {
             'You earned 0 credits\n'
         )
     })
-    it('one tragedy, one comedy and no bonus payments', function () {
+    it('one comedy play with no attendees', function () {
         expect(statement(invoicesJson[1], playsJson)).toEqual(
+            'Statement for NoShowCo\n' +
+            ' As You Like It: $300.00 (0 seats)\n' +
+            'Amount owed is $300.00\n' +
+            'You earned 0 credits\n'
+        )
+    })
+    it('one tragedy, one comedy and no bonus payments', function () {
+        expect(statement(invoicesJson[2], playsJson)).toEqual(
             'Statement for SmallCo\n' +
             ' Hamlet: $400.00 (0 seats)\n' +
             ' As You Like It: $300.00 (0 seats)\n' +
@@ -65,7 +82,7 @@ describe('Statement', function () {
         )
     })
     it("multiple plays and all require bonus payments due to attendance", function () {
-        expect(statement(invoicesJson[2], playsJson)).toEqual(
+        expect(statement(invoicesJson[3], playsJson)).toEqual(
             'Statement for BigCo\n' +
             ' Hamlet: $650.00 (55 seats)\n' +
             ' As You Like It: $580.00 (35 seats)\n' +
