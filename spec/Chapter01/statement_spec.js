@@ -6,8 +6,8 @@ describe('Statement', function () {
         "as-like": {"name": "As You Like It", "type": "comedy"},
         "othello": {"name": "Othello", "type": "tragedy"}
     };
-    const invoicesJson = [
-        {
+    it('one tragedy play with no attendees', function () {
+        let invoiceJson = {
             "customer": "NoShowCo",
             "performances": [
                 {
@@ -15,8 +15,16 @@ describe('Statement', function () {
                     "audience": 0
                 }
             ]
-        },
-        {
+        };
+        expect(statement(invoiceJson, playsJson)).toEqual(
+            'Statement for NoShowCo\n' +
+            ' Hamlet: $400.00 (0 seats)\n' +
+            'Amount owed is $400.00\n' +
+            'You earned 0 credits\n'
+        )
+    })
+    it('one comedy play with no attendees', function () {
+        let invoiceJson = {
             "customer": "NoShowCo",
             "performances": [
                 {
@@ -24,8 +32,16 @@ describe('Statement', function () {
                     "audience": 0
                 }
             ]
-        },
-        {
+        };
+        expect(statement(invoiceJson, playsJson)).toEqual(
+            'Statement for NoShowCo\n' +
+            ' As You Like It: $300.00 (0 seats)\n' +
+            'Amount owed is $300.00\n' +
+            'You earned 0 credits\n'
+        )
+    })
+    it('one tragedy, one comedy and no bonus payments', function () {
+        let invoiceJson = {
             "customer": "SmallCo",
             "performances": [
                 {
@@ -37,8 +53,17 @@ describe('Statement', function () {
                     "audience": 0
                 }
             ]
-        },
-        {
+        };
+        expect(statement(invoiceJson, playsJson)).toEqual(
+            'Statement for SmallCo\n' +
+            ' Hamlet: $400.00 (0 seats)\n' +
+            ' As You Like It: $300.00 (0 seats)\n' +
+            'Amount owed is $700.00\n' +
+            'You earned 0 credits\n'
+        )
+    })
+    it("multiple plays and all require bonus payments due to attendance", function () {
+        let invoiceJson = {
             "customer": "BigCo",
             "performances": [
                 {
@@ -54,35 +79,8 @@ describe('Statement', function () {
                     "audience": 40
                 }
             ]
-        }
-    ]
-    it('one tragedy play with no attendees', function () {
-        expect(statement(invoicesJson[0], playsJson)).toEqual(
-            'Statement for NoShowCo\n' +
-            ' Hamlet: $400.00 (0 seats)\n' +
-            'Amount owed is $400.00\n' +
-            'You earned 0 credits\n'
-        )
-    })
-    it('one comedy play with no attendees', function () {
-        expect(statement(invoicesJson[1], playsJson)).toEqual(
-            'Statement for NoShowCo\n' +
-            ' As You Like It: $300.00 (0 seats)\n' +
-            'Amount owed is $300.00\n' +
-            'You earned 0 credits\n'
-        )
-    })
-    it('one tragedy, one comedy and no bonus payments', function () {
-        expect(statement(invoicesJson[2], playsJson)).toEqual(
-            'Statement for SmallCo\n' +
-            ' Hamlet: $400.00 (0 seats)\n' +
-            ' As You Like It: $300.00 (0 seats)\n' +
-            'Amount owed is $700.00\n' +
-            'You earned 0 credits\n'
-        )
-    })
-    it("multiple plays and all require bonus payments due to attendance", function () {
-        expect(statement(invoicesJson[3], playsJson)).toEqual(
+        };
+        expect(statement(invoiceJson, playsJson)).toEqual(
             'Statement for BigCo\n' +
             ' Hamlet: $650.00 (55 seats)\n' +
             ' As You Like It: $580.00 (35 seats)\n' +
