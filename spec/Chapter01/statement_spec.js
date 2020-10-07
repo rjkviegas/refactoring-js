@@ -68,10 +68,10 @@ describe('Statement', function () {
             )
         });
     });
-    describe('one tragedy play with 31 attendees', function () {
+    describe('one tragedy play with base + 1 attendees', function () {
         it('returns bonus for 1 extra attendee and 1 credit', function () {
             let invoiceJson = {
-                "customer": "NoShowCo",
+                "customer": "PlentyShowCo",
                 "performances": [
                     {
                         "playID": "hamlet",
@@ -80,10 +80,48 @@ describe('Statement', function () {
                 ]
             };
             expect(statement(invoiceJson, playsJson)).toEqual(
-                'Statement for NoShowCo\n' +
+                'Statement for PlentyShowCo\n' +
                 ' Hamlet: $410.00 (31 seats)\n' +
                 'Amount owed is $410.00\n' +
                 'You earned 1 credits\n'
+            )
+        });
+    });
+    describe('one comedy play with 5 attendees', function () {
+        it('returns base value and bonus and 1 credit', function () {
+            let invoiceJson = {
+                "customer": "SomeShowCo",
+                "performances": [
+                    {
+                        "playID": "as-like",
+                        "audience": 5
+                    }
+                ]
+            };
+            expect(statement(invoiceJson, playsJson)).toEqual(
+                'Statement for SomeShowCo\n' +
+                ' As You Like It: $315.00 (5 seats)\n' +
+                'Amount owed is $315.00\n' +
+                'You earned 1 credits\n'
+            )
+        });
+    });
+    describe('one comedy play with 21 attendees', function () {
+        it('returns base value and bonus and 4 credits', function () {
+            let invoiceJson = {
+                "customer": "SomeShowCo",
+                "performances": [
+                    {
+                        "playID": "as-like",
+                        "audience": 21
+                    }
+                ]
+            };
+            expect(statement(invoiceJson, playsJson)).toEqual(
+                'Statement for SomeShowCo\n' +
+                ' As You Like It: $468.00 (21 seats)\n' +
+                'Amount owed is $468.00\n' +
+                'You earned 4 credits\n'
             )
         });
     });
